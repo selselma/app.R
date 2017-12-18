@@ -1,6 +1,5 @@
 library(randomForest)
-data<-read.csv(file= paste0(dataLung), sep=";", header = TRUE, fileEncoding = "ISO-8859-15", na.strings = c(" ", 
-                                                                                                                     "."))
+data<-read.csv(file= paste0(dataLung), sep=";", header = TRUE, fileEncoding = "ISO-8859-15", na.strings = c(" ", "."))
 #creation de la base de travail
 #netoyer la base
 # retirer les 16 valeurs manquantes
