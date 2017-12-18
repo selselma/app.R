@@ -1,3 +1,11 @@
+library(shiny)
+library(dplyr)
+library(ggplot2)
+library(plotly)
+library(DT)
+library(shinydashboard)
+library(gplots)
+
 ui <- fluidPage(
   
   titlePanel(h4("Application Shiny",align="center")),
@@ -7,7 +15,7 @@ ui <- fluidPage(
     
     
     sidebarPanel(
-    selectInput("patient", "selectionnez un patient", listeT),
+    selectInput("patient", "selectionnez un patient", patients$title),
     br(),
     actionButton("voirPatients", "Voir tous les patients")
     
@@ -22,7 +30,7 @@ mainPanel(
   tabsetPanel(type = "tabs",
               
               tabPanel("Table", tableOutput("table")),
-              tabPanel("Plot", plotOutput("plot"))
+              tabPanel("Plot", plotOutput("Plot"))
   )
   
 ),
@@ -48,10 +56,15 @@ server <- function(input, output) {
   output$table <- renderTable({
     getPatient(input$patient)
   })
+  output$Plot <- renderPlot({
+    p1a= ggplot(patients, aes(x=characteristics.tag.tumor.size.maximumdiameter, y=characteristics.tag.grade))
+    p2c=p1a+geom_point(aes(col=characteristics.tag.gender))
+    plot(p2c)
+  })
   
   observeEvent(input$voirPatients, {
-    hide("resultPatient")
-    output$test <- DT::renderDataTable(patients %>% select(title, organism))
+   
+    output$test <- DT::renderDataTable(patients %>% select(title, organism, CEL.file, characteristics.tag.histology))
   })
   
   

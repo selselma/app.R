@@ -26,4 +26,14 @@ appri=setdiff(1:npop,testi)
 # construction de l'échantillon d'apprentissage
 datapq=dtt[appri,]
 # construction de l'échantillon test
-datestq=data[testi,]
+datestq=dtt[testi,]
+# Transformation de variables facteurs en variables numériques
+dttr=data.frame(matrix(as.integer
+                        (as.matrix(data[,1:8])),ncol=8,dimnames=
+                          dimnames(data[,1:8])),Class=data[,10])
+# construction de l'échantillon d'apprentissage
+dattpr=dttr[appri,]
+# construction de l'échantillon test
+datestr=dttr[testi,]
+summary(dattpr) # vérifications
+summary(datestr)
