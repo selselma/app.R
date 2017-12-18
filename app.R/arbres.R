@@ -1,7 +1,10 @@
 library(randomForest)
-data<-read.csv(file= paste0(dataLung), sep=";")
+data<-read.csv(file= paste0(dataLung), sep=";", header = TRUE, fileEncoding = "ISO-8859-15", na.strings = c(" ", 
+                                                                                                                     "."))
 #creation de la base de travail
 #netoyer la base
+# retirer les 16 valeurs manquantes
+
 library(dplyr)
 summary(data)
 dtt = data[,c("source.location","characteristics.tag.gender",
@@ -29,11 +32,24 @@ datapq=dtt[appri,]
 datestq=dtt[testi,]
 # Transformation de variables facteurs en variables numériques
 dttr=data.frame(matrix(as.integer
-                        (as.matrix(data[,1:8])),ncol=8,dimnames=
-                          dimnames(data[,1:8])),Class=data[,10])
+                        (as.matrix(dttr[,1:8])),ncol=8,dimnames=
+                          dimnames(dttr[,1:8])),Class=data[,8])
 # construction de l'échantillon d'apprentissage
 dattpr=dttr[appri,]
 # construction de l'échantillon test
 datestr=dttr[testi,]
 summary(dattpr) # vérifications
 summary(datestr)
+
+# Exemple de modélisation avec un arbre de décision
+library(rpart)
+fitq.tree=rpart(Class~.,data=datapq,
+                parms=list(split="information"),method="class")
+summary(fitq.tree) # description de l'arbre
+print(fitq.tree)
+plot(fitq.tree)
+text(fitq.tree)
+library(rattle)
+library(rpart.plot)
+library(RColorBrewer)
+fancyRpartPlot(fitq.tree)
